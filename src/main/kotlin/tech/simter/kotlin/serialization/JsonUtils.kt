@@ -21,7 +21,8 @@ object JsonUtils {
   val cfg = JsonConfiguration.Stable.copy(
     ignoreUnknownKeys = true,
     encodeDefaults = false,
-    prettyPrint = false
+    prettyPrint = false,
+    isLenient = true
   )
 
   /** A kotlin json instance with [cfg] configuration to not encode defaults and ignore unknown keys */
