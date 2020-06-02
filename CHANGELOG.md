@@ -1,5 +1,9 @@
 # simter-kotlin changelog
 
+## 2.0.0-M1 - 2020-06-02
+
+- Upgrade to simter-dependencies-2.0.0-M1
+
 ## 1.4.0-M5 - 2020-04-16
 
 - Support a simple [Page] interface for common usage
