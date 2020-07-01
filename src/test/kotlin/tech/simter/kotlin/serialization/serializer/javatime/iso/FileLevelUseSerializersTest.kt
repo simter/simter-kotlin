@@ -7,9 +7,9 @@
   IsoLocalDateSerializer::class,
   IsoLocalTimeSerializer::class,
   IsoMonthDaySerializer::class,
-  MonthSerializer::class,
+  IntMonthSerializer::class,
   IsoYearMonthSerializer::class,
-  YearSerializer::class
+  IntYearSerializer::class
 )
 
 package tech.simter.kotlin.serialization.serializer.javatime.iso
@@ -20,8 +20,8 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonConfiguration.Companion.Stable
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import tech.simter.kotlin.serialization.serializer.javatime.MonthSerializer
-import tech.simter.kotlin.serialization.serializer.javatime.YearSerializer
+import tech.simter.kotlin.serialization.serializer.javatime.int.IntMonthSerializer
+import tech.simter.kotlin.serialization.serializer.javatime.int.IntYearSerializer
 import java.time.*
 
 /**

@@ -1,17 +1,12 @@
-package tech.simter.kotlin.serialization.serializer.javatime
+package tech.simter.kotlin.serialization.serializer.javatime.int
 
 import kotlinx.serialization.*
 import java.time.Month
 
-/**
- * A [KSerializer] between [Month] and digit number from 1 to 12.
- *
- * @author RJ
- */
-object MonthSerializer : KSerializer<Month> {
+object IntMonthSerializer : KSerializer<Month> {
   override val descriptor: SerialDescriptor = PrimitiveDescriptor(
-    serialName = Month::class.qualifiedName!!,
-    kind = PrimitiveKind.STRING
+    serialName = IntMonthSerializer::class.qualifiedName!!,
+    kind = PrimitiveKind.INT
   )
 
   override fun deserialize(decoder: Decoder): Month {

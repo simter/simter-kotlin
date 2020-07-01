@@ -1,4 +1,4 @@
-package tech.simter.kotlin.serialization.serializer.javatime
+package tech.simter.kotlin.serialization.serializer.javatime.int
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -8,21 +8,21 @@ import org.junit.jupiter.api.Test
 import java.time.Month
 
 /**
- * Test [MonthSerializer]
+ * Test [IntMonthSerializer]
  *
  * @author RJ
  */
-class MonthSerializerTest {
+class IntMonthSerializerTest {
   private val json = Json(Stable.copy(encodeDefaults = false))
 
   @Serializable
   data class Bean(
-    val ps: List<@Serializable(with = MonthSerializer::class) Month>,
-    @Serializable(with = MonthSerializer::class)
+    val ps: List<@Serializable(with = IntMonthSerializer::class) Month>,
+    @Serializable(with = IntMonthSerializer::class)
     val p1: Month,
-    @Serializable(with = MonthSerializer::class)
+    @Serializable(with = IntMonthSerializer::class)
     val p2: Month?,
-    @Serializable(with = MonthSerializer::class)
+    @Serializable(with = IntMonthSerializer::class)
     val p3: Month? = null
   )
 

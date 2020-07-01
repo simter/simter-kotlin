@@ -1,4 +1,4 @@
-package tech.simter.kotlin.serialization.serializer.javatime
+package tech.simter.kotlin.serialization.serializer.javatime.int
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -8,21 +8,21 @@ import org.junit.jupiter.api.Test
 import java.time.Year
 
 /**
- * Test [YearSerializer]
+ * Test [IntYearSerializer]
  *
  * @author RJ
  */
-class YearSerializerTest {
+class IntIntYearSerializerTest {
   private val json = Json(Stable.copy(encodeDefaults = false))
 
   @Serializable
   data class Bean(
-    val ps: List<@Serializable(with = YearSerializer::class) Year>,
-    @Serializable(with = YearSerializer::class)
+    val ps: List<@Serializable(with = IntYearSerializer::class) Year>,
+    @Serializable(with = IntYearSerializer::class)
     val p1: Year,
-    @Serializable(with = YearSerializer::class)
+    @Serializable(with = IntYearSerializer::class)
     val p2: Year?,
-    @Serializable(with = YearSerializer::class)
+    @Serializable(with = IntYearSerializer::class)
     val p3: Year? = null
   )
 

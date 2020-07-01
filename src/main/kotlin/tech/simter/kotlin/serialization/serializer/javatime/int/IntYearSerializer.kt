@@ -1,17 +1,12 @@
-package tech.simter.kotlin.serialization.serializer.javatime
+package tech.simter.kotlin.serialization.serializer.javatime.int
 
 import kotlinx.serialization.*
 import java.time.Year
 
-/**
- * A [KSerializer] between [Year] and 4 digit number.
- *
- * @author RJ
- */
-object YearSerializer : KSerializer<Year> {
+object IntYearSerializer : KSerializer<Year> {
   override val descriptor: SerialDescriptor = PrimitiveDescriptor(
-    serialName = Year::class.qualifiedName!!,
-    kind = PrimitiveKind.STRING
+    serialName = IntYearSerializer::class.qualifiedName!!,
+    kind = PrimitiveKind.INT
   )
 
   override fun deserialize(decoder: Decoder): Year {

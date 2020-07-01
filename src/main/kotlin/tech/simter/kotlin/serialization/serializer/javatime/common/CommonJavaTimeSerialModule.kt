@@ -3,8 +3,8 @@ package tech.simter.kotlin.serialization.serializer.javatime.common
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.modules.SerialModule
 import kotlinx.serialization.modules.serializersModuleOf
-import tech.simter.kotlin.serialization.serializer.javatime.MonthSerializer
-import tech.simter.kotlin.serialization.serializer.javatime.YearSerializer
+import tech.simter.kotlin.serialization.serializer.javatime.int.IntMonthSerializer
+import tech.simter.kotlin.serialization.serializer.javatime.int.IntYearSerializer
 import tech.simter.kotlin.serialization.serializer.javatime.iso.IsoLocalDateSerializer
 import tech.simter.kotlin.serialization.serializer.javatime.iso.IsoLocalTimeSerializer
 import tech.simter.kotlin.serialization.serializer.javatime.iso.IsoMonthDaySerializer
@@ -59,7 +59,7 @@ val CommonJavaTimeSerialModule: SerialModule = serializersModuleOf(mapOf<KClass<
   LocalDate::class to IsoLocalDateSerializer,
   LocalTime::class to IsoLocalTimeSerializer,
   MonthDay::class to IsoMonthDaySerializer,
-  Month::class to MonthSerializer,
+  Month::class to IntMonthSerializer,
   YearMonth::class to IsoYearMonthSerializer,
-  Year::class to YearSerializer
+  Year::class to IntYearSerializer
 ))
