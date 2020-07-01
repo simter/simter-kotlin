@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter.ofPattern
  * @author RJ
  */
 object IsoYearMonthSerializer
-  : AbstractJavaTimeSerializer<YearMonth>(ofPattern("yyy-MM")) {
+  : AbstractJavaTimeSerializer<YearMonth>(ofPattern("yyyy-MM")) {
   override fun deserialize(decoder: Decoder): YearMonth {
     return YearMonth.parse(decoder.decodeString(), formatter)
   }

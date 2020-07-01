@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter.ofPattern
  * @author RJ
  */
 object IsoYearMonthSerializer
-  : AbstractNullableJavaTimeSerializer<YearMonth?>(ofPattern("yyy-MM")) {
+  : AbstractNullableJavaTimeSerializer<YearMonth?>(ofPattern("yyyy-MM")) {
   override fun deserialize(decoder: Decoder): YearMonth? {
     val v = decoder.decodeString()
     return if (v.isEmpty()) null else YearMonth.parse(v, formatter)
