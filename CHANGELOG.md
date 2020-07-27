@@ -1,5 +1,12 @@
 # simter-kotlin changelog
 
+## 2.0.0-M2 - 2020-07-27
+
+- Upgrade to simter-dependencies-2.0.0-M2
+- Add IntYearMonthIntSerializer
+- Rename `Year|MonthSerializer` to `IntYear|MonthSerializer`
+- Fixed IsoYearMonth pattern
+
 ## 2.0.0-M1 - 2020-06-02
 
 - Upgrade to simter-dependencies-2.0.0-M1
