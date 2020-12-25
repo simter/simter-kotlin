@@ -3,6 +3,7 @@ package tech.simter.kotlin.serialization
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
+import kotlinx.serialization.encodeToString
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -31,8 +32,7 @@ class JsonUtilsTest {
         get() = p1
     }
 
-    assertThat(JsonUtils.json.stringify(
-      Bean.serializer(),
+    assertThat(JsonUtils.json.encodeToString(
       Bean(
         p1 = "v1",
         p2 = "v2", // custom serial name to cp2
