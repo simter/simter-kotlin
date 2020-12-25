@@ -1,8 +1,15 @@
 package tech.simter.kotlin.serialization
 
-import kotlinx.serialization.*
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration.Companion.Stable
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -12,10 +19,10 @@ import java.time.format.DateTimeFormatter
  * @author RJ
  */
 class KSerializerInheritanceTest {
-  private val stableJson = Json(Stable)
+  private val stableJson = Json {}
 
   @Serializable
-  data class Bean(
+  private data class Bean(
     @Serializable(with = IsoLocalDateSerializer::class)
     val p: LocalDate
   )
@@ -26,10 +33,10 @@ class KSerializerInheritanceTest {
     val bean = Bean(p = LocalDate.of(2019, 12, 1))
 
     // deserialize
-    assertThat(stableJson.parse(Bean.serializer(), json)).isEqualTo(bean)
+    assertThat(stableJson.decodeFromString<Bean>(json)).isEqualTo(bean)
 
     // serialize
-    assertThat(stableJson.stringify(Bean.serializer(), bean)).isEqualTo(json)
+    assertThat(stableJson.encodeToString(bean)).isEqualTo(json)
   }
 }
 
@@ -39,7 +46,7 @@ class KSerializerInheritanceTest {
 object IsoLocalDateSerializer : LocalDateSerializer(DateTimeFormatter.ISO_DATE)
 
 open class LocalDateSerializer(private val formatter: DateTimeFormatter) : KSerializer<LocalDate> {
-  override val descriptor: SerialDescriptor = PrimitiveDescriptor(
+  override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
     serialName = "java.time.LocalDate",
     kind = PrimitiveKind.STRING
   )

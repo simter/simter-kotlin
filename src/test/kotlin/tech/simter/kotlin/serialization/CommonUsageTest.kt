@@ -1,10 +1,7 @@
 package tech.simter.kotlin.serialization
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration.Companion.Stable
-import kotlinx.serialization.json.JsonDecodingException
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Disabled
@@ -16,10 +13,10 @@ import org.junit.jupiter.api.Test
  * @author RJ
  */
 class CommonUsageTest {
-  private val stableJson = Json(Stable)
+  private val stableJson = Json {}
 
   @Serializable
-  data class Bean1(
+  private data class Bean1(
     val p: String
   )
 
@@ -32,7 +29,7 @@ class CommonUsageTest {
     var str = """{
       "p": "test"
     }"""
-    val b = stableJson.parse(Bean1.serializer(), str)
+    val b = stableJson.decodeFromString<Bean1>(str)
     assertThat(b.p).isEqualTo("test")
 
     // 2. failed
@@ -41,8 +38,8 @@ class CommonUsageTest {
       "p": "test",
       "unknownKey": true
     }"""
-    assertThatThrownBy { stableJson.parse(Bean1.serializer(), str) }
-      .isInstanceOf(JsonDecodingException::class.java)
+    assertThatThrownBy { stableJson.decodeFromString<Bean1>(str) }
+      .isInstanceOf(SerializationException::class.java)
       .hasMessageContaining("Encountered an unknown key 'unknownKey'")
 
     // 3. failed
@@ -50,13 +47,13 @@ class CommonUsageTest {
     str = """{
       "p": "test",
     }"""
-    assertThatThrownBy { stableJson.parse(Bean1.serializer(), str) }
-      .isInstanceOf(JsonDecodingException::class.java)
+    assertThatThrownBy { stableJson.decodeFromString<Bean1>(str) }
+      .isInstanceOf(SerializationException::class.java)
       .hasMessageContaining("Unexpected trailing comma")
   }
 
   @Serializable
-  data class Bean2(
+  private data class Bean2(
     @SerialName("p")
     val name: String,
     val opt1: String? = null,
@@ -70,14 +67,14 @@ class CommonUsageTest {
     val str = """{
       "p": "test"
     }"""
-    val b = stableJson.parse(Bean2.serializer(), str)
+    val b = stableJson.decodeFromString<Bean2>(str)
     assertThat(b.name).isEqualTo("test")
     assertThat(b.opt1).isNull()
     assertThat(b.opt2).isEqualTo("t")
   }
 
   @Serializable
-  data class Bean3(
+  private data class Bean3(
     val intNum: Int,
     val intNumFromStr: Int
   )
@@ -89,13 +86,13 @@ class CommonUsageTest {
       "intNum": 123,
       "intNumFromStr": "123"
     }"""
-    val b = stableJson.parse(Bean3.serializer(), str)
+    val b = stableJson.decodeFromString<Bean3>(str)
     assertThat(b.intNum).isEqualTo(123)
     assertThat(b.intNumFromStr).isEqualTo(123)
   }
 
   @Serializable
-  data class BeanX(
+  private data class BeanX(
     val str: String,
     val bool: Boolean,
     val intNum: Int,
@@ -114,7 +111,7 @@ class CommonUsageTest {
       "floatNum": 1.23,
       "doubleNum": 1.23
     }"""
-    val b = stableJson.parse(BeanX.serializer(), str)
+    val b = stableJson.decodeFromString<BeanX>(str)
     assertThat(b.str).isEqualTo("test")
     assertThat(b.bool).isTrue()
     assertThat(b.intNum).isEqualTo(123)
@@ -132,7 +129,7 @@ class CommonUsageTest {
       val computed: String
         get() = "--$name"
     }
-    assertThat(Json(Stable).stringify(Bean.serializer(), Bean(name = "rj")))
+    assertThat(stableJson.encodeToString(Bean(name = "rj")))
       .isEqualTo("""{"name":"rj","computed":"--rj"}""")
   }
 }
