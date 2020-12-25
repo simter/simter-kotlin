@@ -1,13 +1,15 @@
 package tech.simter.kotlin.serialization.serializer.javatime.iso.nullable
 
-import kotlinx.serialization.Decoder
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.encoding.Decoder
 import tech.simter.kotlin.serialization.serializer.javatime.AbstractNullableJavaTimeSerializer
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter.ofPattern
 
 /**
  * A [KSerializer] between [YearMonth] and string value with format 'yyyy-MM'.
+ *
+ * Note: empty [String] value decodes to a null [YearMonth] value
  *
  * @author RJ
  */

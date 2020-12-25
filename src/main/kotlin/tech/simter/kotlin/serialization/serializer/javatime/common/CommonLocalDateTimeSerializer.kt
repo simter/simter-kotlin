@@ -1,7 +1,7 @@
 package tech.simter.kotlin.serialization.serializer.javatime.common
 
-import kotlinx.serialization.Decoder
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.encoding.Decoder
 import tech.simter.kotlin.serialization.serializer.javatime.AbstractJavaTimeSerializer
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern

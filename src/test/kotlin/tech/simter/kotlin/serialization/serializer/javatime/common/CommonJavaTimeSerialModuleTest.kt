@@ -1,23 +1,10 @@
-// See https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/custom_serializers.md#contextualserialization-annotation
-// A file-level annotation `@file:ContextualSerialization(A::class, B::class)`
-// instructs compiler plugin to use ContextSerializer everywhere in this file for properties of types A and B.
-@file:ContextualSerialization(
-  OffsetDateTime::class,
-  LocalDateTime::class,
-  LocalDate::class,
-  LocalTime::class,
-  MonthDay::class,
-  Month::class,
-  YearMonth::class,
-  Year::class
-)
-
 package tech.simter.kotlin.serialization.serializer.javatime.common
 
-import kotlinx.serialization.ContextualSerialization
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration.Companion.Stable
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.*
@@ -29,17 +16,25 @@ import java.time.*
  */
 class CommonJavaTimeSerialModuleTest {
   // See https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/custom_serializers.md#contextualserialization-annotation
-  private val json = Json(configuration = Stable, context = CommonJavaTimeSerialModule)
+  private val json = Json { serializersModule = CommonJavaTimeSerialModule }
 
   @Serializable
   data class Bean(
+    @Contextual
     val p1: LocalDateTime,
+    @Contextual
     val p2: LocalDate,
+    @Contextual
     val p3: LocalTime,
+    @Contextual
     val p4: MonthDay,
+    @Contextual
     val p5: Month,
+    @Contextual
     val p6: YearMonth,
+    @Contextual
     val p7: Year,
+    @Contextual
     val p8: OffsetDateTime
   )
 
@@ -70,7 +65,7 @@ class CommonJavaTimeSerialModuleTest {
       p7 = Year.from(t),
       p8 = t
     )
-    assertThat(json.parse(Bean.serializer(), str)).isEqualTo(bean)
-    assertThat(json.stringify(Bean.serializer(), bean)).isEqualTo(str)
+    assertThat(json.decodeFromString<Bean>(str)).isEqualTo(bean)
+    assertThat(json.encodeToString(bean)).isEqualTo(str)
   }
 }

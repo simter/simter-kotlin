@@ -1,20 +1,9 @@
-@file:ContextualSerialization(
-  OffsetDateTime::class,
-  LocalDateTime::class,
-  LocalDate::class,
-  LocalTime::class,
-  MonthDay::class,
-  Month::class,
-  YearMonth::class,
-  Year::class
-)
-
 package tech.simter.kotlin.serialization.serializer.javatime.common
 
-import kotlinx.serialization.ContextualSerialization
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration.Companion.Stable
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.*
@@ -26,10 +15,11 @@ import java.time.*
  */
 class AccurateToMinuteSerializerTest {
   // See https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/custom_serializers.md#contextualserialization-annotation
-  private val json = Json(configuration = Stable, context = CommonJavaTimeSerialModule)
+  private val json = Json { serializersModule = CommonJavaTimeSerialModule }
 
   @Serializable
   data class Bean(
+    @Contextual
     val dt0: OffsetDateTime, // Use CommonJavaTimeSerialModule
     @Serializable(with = AccurateToMinuteSerializer::class)
     val dt1: OffsetDateTime,
@@ -57,6 +47,6 @@ class AccurateToMinuteSerializerTest {
       t1 = t.toLocalTime(),
       t2 = t.toOffsetTime()
     )
-    assertThat(json.stringify(Bean.serializer(), bean)).isEqualTo(str)
+    assertThat(json.encodeToString(bean)).isEqualTo(str)
   }
 }

@@ -1,7 +1,7 @@
 package tech.simter.kotlin.serialization.serializer.javatime.common.nullable
 
-import kotlinx.serialization.Decoder
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.encoding.Decoder
 import tech.simter.kotlin.serialization.serializer.javatime.AbstractNullableJavaTimeSerializer
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
@@ -10,6 +10,8 @@ import java.util.*
 
 /**
  * A [KSerializer] between [OffsetDateTime] and string value with common format 'yyyy-MM-dd HH:mm:ss+Z'.
+ *
+ * Note: empty [String] value decodes to a null [OffsetDateTime] value
  *
  * Always recognize time offset is local offset.
  *

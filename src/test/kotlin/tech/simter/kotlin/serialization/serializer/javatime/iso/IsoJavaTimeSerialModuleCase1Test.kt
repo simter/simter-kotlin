@@ -1,9 +1,10 @@
 package tech.simter.kotlin.serialization.serializer.javatime.iso
 
-import kotlinx.serialization.ContextualSerialization
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration.Companion.Stable
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.*
@@ -15,25 +16,25 @@ import java.time.*
  */
 class IsoJavaTimeSerialModuleCase1Test {
   // See https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/custom_serializers.md#contextualserialization-annotation
-  private val json = Json(configuration = Stable, context = IsoJavaTimeSerialModule)
+  private val json = Json { serializersModule = IsoJavaTimeSerialModule }
 
   @Serializable
   data class Bean(
-    @ContextualSerialization
+    @Contextual
     val p1: LocalDateTime,
-    @ContextualSerialization
+    @Contextual
     val p2: LocalDate,
-    @ContextualSerialization
+    @Contextual
     val p3: LocalTime,
-    @ContextualSerialization
+    @Contextual
     val p4: MonthDay,
-    @ContextualSerialization
+    @Contextual
     val p5: Month,
-    @ContextualSerialization
+    @Contextual
     val p6: YearMonth,
-    @ContextualSerialization
+    @Contextual
     val p7: Year,
-    @ContextualSerialization
+    @Contextual
     val p8: OffsetDateTime
   )
 
@@ -63,7 +64,7 @@ class IsoJavaTimeSerialModuleCase1Test {
       p7 = Year.from(t),
       p8 = t
     )
-    assertThat(json.parse(Bean.serializer(), str)).isEqualTo(bean)
-    assertThat(json.stringify(Bean.serializer(), bean)).isEqualTo(str)
+    assertThat(json.decodeFromString<Bean>(str)).isEqualTo(bean)
+    assertThat(json.encodeToString<Bean>(bean)).isEqualTo(str)
   }
 }

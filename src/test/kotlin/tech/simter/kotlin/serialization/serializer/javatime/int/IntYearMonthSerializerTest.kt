@@ -1,8 +1,9 @@
 package tech.simter.kotlin.serialization.serializer.javatime.int
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration.Companion.Stable
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.YearMonth
@@ -13,7 +14,7 @@ import java.time.YearMonth
  * @author RJ
  */
 class IntYearMonthSerializerTest {
-  private val json = Json(Stable.copy(encodeDefaults = false))
+  private val json = Json { encodeDefaults = false }
 
   @Serializable
   data class Bean(
@@ -31,7 +32,7 @@ class IntYearMonthSerializerTest {
     val ym = YearMonth.of(2019, 1)
     val str = """{"ps":[201901],"p1":201901,"p2":null}"""
     val bean = Bean(ps = listOf(ym), p1 = ym, p2 = null)
-    assertThat(json.parse(Bean.serializer(), str)).isEqualTo(bean)
-    assertThat(json.stringify(Bean.serializer(), bean)).isEqualTo(str)
+    assertThat(json.decodeFromString<Bean>(str)).isEqualTo(bean)
+    assertThat(json.encodeToString(bean)).isEqualTo(str)
   }
 }

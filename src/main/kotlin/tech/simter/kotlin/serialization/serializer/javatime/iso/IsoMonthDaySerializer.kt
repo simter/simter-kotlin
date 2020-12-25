@@ -1,7 +1,7 @@
 package tech.simter.kotlin.serialization.serializer.javatime.iso
 
-import kotlinx.serialization.Decoder
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.encoding.Decoder
 import tech.simter.kotlin.serialization.serializer.javatime.AbstractJavaTimeSerializer
 import java.time.MonthDay
 import java.time.format.DateTimeFormatter.ofPattern

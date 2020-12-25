@@ -1,8 +1,9 @@
 package tech.simter.kotlin.serialization.serializer.javatime.iso
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonConfiguration.Companion.Stable
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.time.LocalTime
@@ -13,7 +14,7 @@ import java.time.LocalTime
  * @author RJ
  */
 class IsoLocalTimeSerializerTest {
-  private val json = Json(Stable.copy(encodeDefaults = false))
+  private val json = Json { encodeDefaults = false }
 
   @Serializable
   data class Bean(
@@ -31,7 +32,7 @@ class IsoLocalTimeSerializerTest {
     val t = LocalTime.of(1, 20, 59)
     val str = """{"ps":["01:20:59"],"p1":"01:20:59","p2":null}"""
     val bean = Bean(ps = listOf(t), p1 = t, p2 = null)
-    assertThat(json.parse(Bean.serializer(), str)).isEqualTo(bean)
-    assertThat(json.stringify(Bean.serializer(), bean)).isEqualTo(str)
+    assertThat(json.decodeFromString<Bean>(str)).isEqualTo(bean)
+    assertThat(json.encodeToString(bean)).isEqualTo(str)
   }
 }

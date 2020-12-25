@@ -1,6 +1,11 @@
 package tech.simter.kotlin.serialization.serializer.javatime.common
 
-import kotlinx.serialization.*
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import java.time.*
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatter.ofPattern
@@ -17,7 +22,7 @@ import java.time.temporal.Temporal
 object AccurateToMinuteSerializer : KSerializer<Temporal> {
   private val dateTimeFormatter: DateTimeFormatter = ofPattern("yyyy-MM-dd HH:mm")
   private val timeFormatter: DateTimeFormatter = ofPattern("HH:mm")
-  override val descriptor: SerialDescriptor = PrimitiveDescriptor(
+  override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor(
     serialName = "javatime.common.AccurateToMinuteSerializer",
     kind = PrimitiveKind.STRING
   )
