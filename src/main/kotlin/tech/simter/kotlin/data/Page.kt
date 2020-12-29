@@ -28,7 +28,6 @@ interface Page<T> {
   val pageCount: Int
     get() = calculatePageCount(total, limit)
 
-  @Serializable
   private data class Impl<T>(
     override val offset: Int,
     override val limit: Int,
