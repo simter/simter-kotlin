@@ -1,19 +1,34 @@
 # simter-kotlin changelog
 
+## 3.0.0-M1 - 2021-01-18
+
+- Upgrade to simter-3.0.0-M1
+- Upgrade to kotlinx-serialization-1.0.1
+    - Add a [KotlinJsonAutoConfiguration] for spring-boot auto configuration
+- Upgrade javatime serializer code
+- Add nullable BigDecimal serializer
+    - deserializer empty string to null value
+    - smart serialize to integer or decimal number
+- Add strict type BigDecimal serializer (for String or Number)
+    - `BigDecimalAsStringSerializer`
+    - `BigDecimalAsNumberSerializer`
+
+[KotlinJsonAutoConfiguration]: https://github.com/simter/simter-kotlin/blob/master/src/main/kotlin/tech/simter/kotlin/serialization/KotlinJsonAutoConfiguration.kt
+
 ## 2.0.0 - 2020-11-19
 
-- Upgrade to simter-dependencies-2.0.0
+- Upgrade to simter-2.0.0
 
 ## 2.0.0-M2 - 2020-07-27
 
-- Upgrade to simter-dependencies-2.0.0-M2
+- Upgrade to simter-2.0.0-M2
 - Add IntYearMonthIntSerializer
 - Rename `Year|MonthSerializer` to `IntYear|MonthSerializer`
 - Fixed IsoYearMonth pattern
 
 ## 2.0.0-M1 - 2020-06-02
 
-- Upgrade to simter-dependencies-2.0.0-M1
+- Upgrade to simter-2.0.0-M1
 
 ## 1.4.0-M5 - 2020-04-16
 
@@ -26,7 +41,7 @@
 
 ## 1.4.0-M4 - 2020-03-01
 
-- Upgrade to simter-dependencies-1.3.0-M13
+- Upgrade to simter-1.3.0-M13
 
 ## 1.4.0-M3 - 2020-01-08
 
