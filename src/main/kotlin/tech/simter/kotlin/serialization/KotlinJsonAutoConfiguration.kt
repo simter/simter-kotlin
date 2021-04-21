@@ -1,6 +1,8 @@
 package tech.simter.kotlin.serialization
 
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.overwriteWith
 import org.slf4j.Logger
@@ -66,8 +68,7 @@ class KotlinJsonAutoConfiguration {
     @Value("\${simter.kotlinx-serialization.class-discriminator:type}")
     classDiscriminator: String = "type"
   ): Json {
-    logger.info("{} SerializersModules ready to register", serializersModules?.size ?: 0)
-    return Json {
+    val json = Json {
       this.ignoreUnknownKeys = true
       this.encodeDefaults = false
       this.prettyPrint = false
@@ -81,6 +82,15 @@ class KotlinJsonAutoConfiguration {
         }
       }
     }
+    logger.info(
+      "register a kotlinx/Json bean ({}) with {} custom SerializersModules",
+      json,
+      serializersModules?.size ?: 0
+    )
+    if (logger.isDebugEnabled && !serializersModules.isNullOrEmpty()) {
+      serializersModules.forEachIndexed { index, m -> logger.debug("  {} {}", index, m) }
+    }
+    return json
   }
 
   /** Register default JavaTime [SerializersModule] */
