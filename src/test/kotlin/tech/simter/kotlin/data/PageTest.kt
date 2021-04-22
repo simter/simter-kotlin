@@ -53,39 +53,4 @@ class PageTest {
     assertThat(calculatePageCount(25, 25)).isEqualTo(1)
     assertThat(calculatePageCount(26, 25)).isEqualTo(2)
   }
-
-  @Test
-  fun testToMap() {
-    data class Bean(val name: String)
-
-    val page = Page.of(limit = 25, offset = 0, total = 100, rows = emptyList<Bean>())
-
-    // empty mapper
-    assertThat(page.toMap())
-      .isEqualTo(mapOf(
-        "offset" to page.offset,
-        "limit" to page.limit,
-        "total" to page.total,
-        "pageNo" to page.pageNo,
-        "pageCount" to page.pageCount,
-        "rows" to page.rows
-      ))
-
-    // map limit to pageSize ...
-    assertThat(page.toMap(
-      "offset" to "start",
-      "limit" to "pageSize",
-      "total" to "totalCount",
-      "pageNo" to "pageNumber",
-      "pageCount" to "totalPages",
-      "rows" to "content"
-    )).isEqualTo(mapOf(
-      "start" to page.offset,
-      "pageSize" to page.limit,
-      "totalCount" to page.total,
-      "pageNumber" to page.pageNo,
-      "totalPages" to page.pageCount,
-      "content" to page.rows
-    ))
-  }
 }

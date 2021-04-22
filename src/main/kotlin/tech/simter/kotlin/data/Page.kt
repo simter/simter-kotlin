@@ -1,6 +1,8 @@
 package tech.simter.kotlin.data
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.*
 
 /**
  * The page data holder.
@@ -28,25 +30,39 @@ interface Page<T> {
   val pageCount: Int
     get() = calculatePageCount(total, limit)
 
-  private data class Impl<T>(
-    override val offset: Int,
-    override val limit: Int,
-    override val total: Long,
-    override val rows: List<T>
-  ) : Page<T>
-
   /** Convert this [Page] to a [Map] structure with specific [propertyMapper] */
   fun toMap(vararg propertyMapper: Pair<String, String>): Map<String, Any> {
     return toMap(this, *propertyMapper)
   }
 
   companion object {
-    private object EmptyPage : Page<Nothing> {
-      override val offset: Int = 0
-      override val limit: Int = 0
-      override val total: Long = 0
-      override val rows: List<Nothing> = emptyList()
-    }
+    /**
+     * The default internal [Page] implementation.
+     *
+     * It is a kotlin [Serializable] [Page] type.
+     */
+    @Serializable
+    @SerialName("Page")
+    internal data class Impl<T>(
+      override val offset: Int,
+      override val limit: Int,
+      override val total: Long,
+      override val rows: List<T>
+    ) : Page<T>
+
+    /**
+     * Returns an const empty page.
+     *
+     * The returned page is kotlin [Serializable].
+     */
+    @Suppress("UNCHECKED_CAST")
+    fun <T> empty(): Page<T> = EMPTY_PAGE as Page<T>
+    private val EMPTY_PAGE = Impl<Nothing>(
+      offset = 0,
+      limit = 0,
+      total = 0,
+      rows = emptyList()
+    )
 
     /**
      * Build a page instance.
@@ -61,14 +77,6 @@ interface Page<T> {
         rows = rows
       )
     }
-
-    /**
-     * Returns an empty page.
-     *
-     * The returned page is kotlin [Serializable].
-     */
-    @Suppress("UNCHECKED_CAST")
-    fun <T> emptyPage(): Page<T> = EmptyPage as Page<T>
 
     /** Calculate 0-base start point */
     fun calculateOffset(pageNo: Int, limit: Int): Int {
@@ -85,8 +93,13 @@ interface Page<T> {
       return if (limit <= 0) 0 else 0L.coerceAtLeast((total + limit - 1) / limit).toInt()
     }
 
-    private fun getMappedKey(keyMapper: Map<String, String>, key: String): String {
-      return keyMapper.getOrDefault(key, key)
+    /**
+     * Get a mapped key.
+     *
+     * If without a mapped key inside [keyMapper], use the [originalKey] instead.
+     */
+    fun getMappedKey(keyMapper: Map<String, String>, originalKey: String): String {
+      return keyMapper.getOrDefault(originalKey, originalKey)
     }
 
     /** Convert [Page] to a [Map] structure with specific [propertyMapper] */
@@ -99,6 +112,19 @@ interface Page<T> {
         getMappedKey(map, "pageNo") to page.pageNo,
         getMappedKey(map, "pageCount") to page.pageCount,
         getMappedKey(map, "rows") to page.rows
+      )
+    }
+
+    /** Convert [Page] to a [Map] structure with specific [propertyMapper] for [Json] serialization */
+    inline fun <reified T> toMap(page: Page<T>, json: Json, vararg propertyMapper: Pair<String, String>): Map<String, JsonElement> {
+      val map = mapOf(*propertyMapper)
+      return mapOf(
+        getMappedKey(map, "offset") to JsonPrimitive(page.offset),
+        getMappedKey(map, "limit") to JsonPrimitive(page.limit),
+        getMappedKey(map, "total") to JsonPrimitive(page.total),
+        getMappedKey(map, "pageNo") to JsonPrimitive(page.pageNo),
+        getMappedKey(map, "pageCount") to JsonPrimitive(page.pageCount),
+        getMappedKey(map, "rows") to JsonArray(page.rows.map { json.encodeToJsonElement(it) })
       )
     }
   }

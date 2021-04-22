@@ -1,10 +1,11 @@
 package tech.simter.kotlin.serialization
 
+import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.overwriteWith
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import tech.simter.kotlin.data.Page
 import tech.simter.kotlin.serialization.serializer.javatime.common.CommonJavaTimeSerialModule
 import tech.simter.kotlin.serialization.serializer.math.BigDecimalSerializer
 import java.math.BigDecimal
@@ -69,10 +71,10 @@ class KotlinJsonAutoConfiguration {
     classDiscriminator: String = "type"
   ): Json {
     val json = Json {
-      this.ignoreUnknownKeys = true
-      this.encodeDefaults = false
-      this.prettyPrint = false
-      this.isLenient = true
+      this.ignoreUnknownKeys = true // ignore unknown keys when deserialize
+      this.encodeDefaults = false // property not serialize if value equals to its default value
+      this.prettyPrint = false // no indent and spaces between key or value
+      this.isLenient = true // allowed quoted boolean literals, and unquoted string literals
       this.classDiscriminator = classDiscriminator // default value is 'type'
       if (!serializersModules.isNullOrEmpty()) {
         // mix all SerializersModule
@@ -106,6 +108,31 @@ class KotlinJsonAutoConfiguration {
   fun bigDecimalSerializersModule(): SerializersModule {
     return SerializersModule {
       contextual(BigDecimal::class, BigDecimalSerializer)
+    }
+  }
+
+  /**
+   * Register a [SerializersModule] for default [Page] implementation.
+   *
+   * Note: To make `Page<T>` work, need to extra register concrete class for Any like below:
+   *
+   * ```kotlin
+   *   @Bean
+   *   fun any2MyBeanSerializersModule(): SerializersModule {
+   *     return SerializersModule {
+   *       polymorphic(Any::class) { subclass(MyBean::class) }
+   *     }
+   *   }
+   * ```
+   */
+  @Bean("pageSerializersModule")
+  @ConditionalOnMissingBean(name = ["pageSerializersModule"])
+  fun pageSerializersModule(): SerializersModule {
+    // https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/polymorphism.md#polymorphism-and-generic-classes
+    return SerializersModule {
+      polymorphic(Page::class) {
+        subclass(Page.Companion.Impl.serializer(PolymorphicSerializer(Any::class)))
+      }
     }
   }
 }
