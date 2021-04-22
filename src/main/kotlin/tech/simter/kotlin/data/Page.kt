@@ -3,6 +3,8 @@ package tech.simter.kotlin.data
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.*
+import tech.simter.kotlin.data.Page.Companion.MappedType.OffsetLimit
+import tech.simter.kotlin.data.Page.Companion.MappedType.PageNoPageSize
 
 /**
  * The page data holder.
@@ -30,12 +32,9 @@ interface Page<T> {
   val pageCount: Int
     get() = calculatePageCount(total, limit)
 
-  /** Convert this [Page] to a [Map] structure with specific [propertyMapper] */
-  fun toMap(vararg propertyMapper: Pair<String, String>): Map<String, Any> {
-    return toMap(this, *propertyMapper)
-  }
-
   companion object {
+    const val DEFAULT_LIMIT = 25
+
     /**
      * The default internal [Page] implementation.
      *
@@ -115,17 +114,39 @@ interface Page<T> {
       )
     }
 
-    /** Convert [Page] to a [Map] structure with specific [propertyMapper] for [Json] serialization */
-    inline fun <reified T> toMap(page: Page<T>, json: Json, vararg propertyMapper: Pair<String, String>): Map<String, JsonElement> {
-      val map = mapOf(*propertyMapper)
-      return mapOf(
-        getMappedKey(map, "offset") to JsonPrimitive(page.offset),
-        getMappedKey(map, "limit") to JsonPrimitive(page.limit),
-        getMappedKey(map, "total") to JsonPrimitive(page.total),
-        getMappedKey(map, "pageNo") to JsonPrimitive(page.pageNo),
-        getMappedKey(map, "pageCount") to JsonPrimitive(page.pageCount),
-        getMappedKey(map, "rows") to JsonArray(page.rows.map { json.encodeToJsonElement(it) })
-      )
+    enum class MappedType {
+      OffsetLimit, PageNoPageSize, Both
+    }
+
+    /** Convert [Page] to a [Map] structure with specific [mappedProperties] for [Json] serialization */
+    inline fun <reified T> toMap(
+      page: Page<T>,
+      json: Json,
+      jsonType: MappedType = PageNoPageSize,
+      mappedProperties: Map<String, String> = emptyMap()
+    ): Map<String, JsonElement> {
+      return when (jsonType) {
+        OffsetLimit -> mapOf(
+          getMappedKey(mappedProperties, "offset") to JsonPrimitive(page.offset),
+          getMappedKey(mappedProperties, "limit") to JsonPrimitive(page.limit),
+          getMappedKey(mappedProperties, "total") to JsonPrimitive(page.total),
+          getMappedKey(mappedProperties, "rows") to JsonArray(page.rows.map { json.encodeToJsonElement(it) })
+        )
+        PageNoPageSize -> mapOf(
+          getMappedKey(mappedProperties, "pageNo") to JsonPrimitive(page.pageNo),
+          getMappedKey(mappedProperties, "pageCount") to JsonPrimitive(page.pageCount),
+          getMappedKey(mappedProperties, "total") to JsonPrimitive(page.total),
+          getMappedKey(mappedProperties, "rows") to JsonArray(page.rows.map { json.encodeToJsonElement(it) })
+        )
+        else -> mapOf(
+          getMappedKey(mappedProperties, "offset") to JsonPrimitive(page.offset),
+          getMappedKey(mappedProperties, "limit") to JsonPrimitive(page.limit),
+          getMappedKey(mappedProperties, "pageNo") to JsonPrimitive(page.pageNo),
+          getMappedKey(mappedProperties, "pageCount") to JsonPrimitive(page.pageCount),
+          getMappedKey(mappedProperties, "total") to JsonPrimitive(page.total),
+          getMappedKey(mappedProperties, "rows") to JsonArray(page.rows.map { json.encodeToJsonElement(it) })
+        )
+      }
     }
   }
 }
