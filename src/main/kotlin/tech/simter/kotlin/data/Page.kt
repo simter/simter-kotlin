@@ -13,7 +13,7 @@ import tech.simter.kotlin.data.Page.Companion.MappedType.PageNoPageSize
  */
 interface Page<T> {
   /** The zero-base start point */
-  val offset: Int
+  val offset: Long
 
   /** The maximum size of each page */
   val limit: Int
@@ -33,7 +33,7 @@ interface Page<T> {
     get() = calculatePageCount(total, limit)
 
   companion object {
-    const val DEFAULT_LIMIT = 25
+    const val DEFAULT_LIMIT: Int = 25
 
     /**
      * The default internal [Page] implementation.
@@ -43,7 +43,7 @@ interface Page<T> {
     @Serializable
     @SerialName("Page")
     internal data class Impl<T>(
-      override val offset: Int,
+      override val offset: Long,
       override val limit: Int,
       override val total: Long,
       override val rows: List<T>
@@ -68,7 +68,7 @@ interface Page<T> {
      *
      * The returned page is kotlin [Serializable].
      */
-    fun <T> of(limit: Int, offset: Int = 0, total: Long = 0, rows: List<T> = emptyList()): Page<T> {
+    fun <T> of(limit: Int, offset: Long = 0, total: Long = 0, rows: List<T> = emptyList()): Page<T> {
       return Impl(
         offset = offset,
         limit = limit,
@@ -83,8 +83,8 @@ interface Page<T> {
     }
 
     /** Calculate 1-base page number */
-    fun calculatePageNo(offset: Int, limit: Int): Int {
-      return if (limit <= 0) 1 else 1.coerceAtLeast(offset / limit + 1)
+    fun calculatePageNo(offset: Long, limit: Int): Int {
+      return if (limit <= 0) 1 else 1.coerceAtLeast((offset / limit + 1).toInt())
     }
 
     /** Calculate the count of total pages */
