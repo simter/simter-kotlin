@@ -4,3 +4,6 @@ logging:
   level: # TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF
     root: ERROR
     tech.simter.kotlin: WARN
+simter:
+  kotlinx-serialization:
+    class-discriminator: "#class" # kotlinx-serialization default 'type'

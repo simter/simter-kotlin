@@ -60,15 +60,15 @@ class KotlinJsonAutoConfiguration {
    *
    * @param[serializersModules] all register [SerializersModule]s
    * @param[removeClassDiscriminator] whether to remove the classDiscriminator when encode to json string, default false
-   * @param[classDiscriminator] the [Json] classDiscriminator for polymorphic, default value is kotlin-serialization 'type'
+   * @param[classDiscriminator] the [Json] classDiscriminator for polymorphic, change to '#class' instead of kotlin-serialization default value 'type'
    */
   @Bean
   fun kotlinJson(
     serializersModules: List<SerializersModule>? = emptyList(),
     @Value("\${simter.kotlinx-serialization.remove-class-discriminator:false}")
     removeClassDiscriminator: Boolean,
-    @Value("\${simter.kotlinx-serialization.class-discriminator:type}")
-    classDiscriminator: String = "type"
+    @Value("\${simter.kotlinx-serialization.class-discriminator:#class}")
+    classDiscriminator: String = "#class"
   ): Json {
     val json = Json {
       this.ignoreUnknownKeys = true // ignore unknown keys when deserialize

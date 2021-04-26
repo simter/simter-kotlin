@@ -69,11 +69,11 @@ class KotlinJsonAutoConfiguration2Test @Autowired constructor(private val json: 
     // for interface implementation, add type key to indicate the real class
     val p1: Project1 = Project1Impl(id = 0, code = "c", title = "t")
     assertThat(json.encodeToString(p1))
-      .isEqualTo("""{"type":"Project1Impl","id":0,"code":"c","title":"t"}""")
+      .isEqualTo("""{"#class":"Project1Impl","id":0,"code":"c","title":"t"}""")
 
     // for interface implementation, add type key to indicate the real class
     val p2: Project2 = Project2Impl(id = 1)
     assertThat(json.encodeToString(p2))
-      .isEqualTo("""{"type":"Project2Impl","id":1}""")
+      .isEqualTo("""{"#class":"Project2Impl","id":1}""")
   }
 }
