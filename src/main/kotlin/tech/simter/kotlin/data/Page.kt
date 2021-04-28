@@ -117,12 +117,14 @@ interface Page<T> {
           getMappedKey(mappedProperties, "offset") to JsonPrimitive(page.offset),
           getMappedKey(mappedProperties, "limit") to JsonPrimitive(page.limit),
           getMappedKey(mappedProperties, "total") to JsonPrimitive(page.total),
+          getMappedKey(mappedProperties, "pageCount") to JsonPrimitive(page.pageCount),
           getMappedKey(mappedProperties, "rows") to JsonArray(page.rows.map { json.encodeToJsonElement(it) })
         )
         PageNoPageSize -> mapOf(
           getMappedKey(mappedProperties, "pageNo") to JsonPrimitive(page.pageNo),
           getMappedKey(mappedProperties, "pageSize ") to JsonPrimitive(page.limit),
           getMappedKey(mappedProperties, "total") to JsonPrimitive(page.total),
+          getMappedKey(mappedProperties, "pageCount") to JsonPrimitive(page.pageCount),
           getMappedKey(mappedProperties, "rows") to JsonArray(page.rows.map { json.encodeToJsonElement(it) })
         )
         else -> mapOf(
@@ -132,6 +134,7 @@ interface Page<T> {
           getMappedKey(mappedProperties, "pageNo") to JsonPrimitive(page.pageNo),
           getMappedKey(mappedProperties, "pageSize") to JsonPrimitive(page.limit),
           getMappedKey(mappedProperties, "count") to JsonPrimitive(page.total),
+          getMappedKey(mappedProperties, "pageCount") to JsonPrimitive(page.pageCount),
           getMappedKey(mappedProperties, "rows") to JsonArray(page.rows.map { json.encodeToJsonElement(it) })
         )
       }
