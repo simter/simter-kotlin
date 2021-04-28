@@ -78,8 +78,8 @@ interface Page<T> {
     }
 
     /** Calculate 0-base start point */
-    fun calculateOffset(pageNo: Int, limit: Int): Int {
-      return 0.coerceAtLeast((pageNo - 1) * limit)
+    fun calculateOffset(pageNo: Int, limit: Int): Long {
+      return 0L.coerceAtLeast((pageNo - 1) * limit.toLong())
     }
 
     /** Calculate 1-base page number */
@@ -122,10 +122,10 @@ interface Page<T> {
     inline fun <reified T> toMap(
       page: Page<T>,
       json: Json,
-      jsonType: MappedType = PageNoPageSize,
+      mappedType: MappedType = MappedType.Both,
       mappedProperties: Map<String, String> = emptyMap()
     ): Map<String, JsonElement> {
-      return when (jsonType) {
+      return when (mappedType) {
         OffsetLimit -> mapOf(
           getMappedKey(mappedProperties, "offset") to JsonPrimitive(page.offset),
           getMappedKey(mappedProperties, "limit") to JsonPrimitive(page.limit),
@@ -134,16 +134,17 @@ interface Page<T> {
         )
         PageNoPageSize -> mapOf(
           getMappedKey(mappedProperties, "pageNo") to JsonPrimitive(page.pageNo),
-          getMappedKey(mappedProperties, "pageCount") to JsonPrimitive(page.pageCount),
+          getMappedKey(mappedProperties, "pageSize ") to JsonPrimitive(page.limit),
           getMappedKey(mappedProperties, "total") to JsonPrimitive(page.total),
           getMappedKey(mappedProperties, "rows") to JsonArray(page.rows.map { json.encodeToJsonElement(it) })
         )
         else -> mapOf(
           getMappedKey(mappedProperties, "offset") to JsonPrimitive(page.offset),
           getMappedKey(mappedProperties, "limit") to JsonPrimitive(page.limit),
-          getMappedKey(mappedProperties, "pageNo") to JsonPrimitive(page.pageNo),
-          getMappedKey(mappedProperties, "pageCount") to JsonPrimitive(page.pageCount),
           getMappedKey(mappedProperties, "total") to JsonPrimitive(page.total),
+          getMappedKey(mappedProperties, "pageNo") to JsonPrimitive(page.pageNo),
+          getMappedKey(mappedProperties, "pageSize") to JsonPrimitive(page.limit),
+          getMappedKey(mappedProperties, "count") to JsonPrimitive(page.total),
           getMappedKey(mappedProperties, "rows") to JsonArray(page.rows.map { json.encodeToJsonElement(it) })
         )
       }
