@@ -1,5 +1,15 @@
 # simter-kotlin changelog
 
+## 3.0.0-M2 - 2021-04-28
+
+- Upgrade to simter-3.0.0-M2
+- Make Page interface serializable
+- Set default classDiscriminator to '#class'
+- Change `Page.offset` to `Long` type
+- Enhance `Page.toMap` method
+- Remove JsonUtils class
+    > Prefer to use `tech.simter.kotlin.serialization.KotlinJsonAutoConfiguration#kotlinJson`
+
 ## 3.0.0-M1 - 2021-01-18
 
 - Upgrade to simter-3.0.0-M1
