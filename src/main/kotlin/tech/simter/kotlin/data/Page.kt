@@ -101,19 +101,6 @@ interface Page<T> {
       return keyMapper.getOrDefault(originalKey, originalKey)
     }
 
-    /** Convert [Page] to a [Map] structure with specific [propertyMapper] */
-    fun <T> toMap(page: Page<T>, vararg propertyMapper: Pair<String, String>): Map<String, Any> {
-      val map = mapOf(*propertyMapper)
-      return mapOf(
-        getMappedKey(map, "offset") to page.offset,
-        getMappedKey(map, "limit") to page.limit,
-        getMappedKey(map, "total") to page.total,
-        getMappedKey(map, "pageNo") to page.pageNo,
-        getMappedKey(map, "pageCount") to page.pageCount,
-        getMappedKey(map, "rows") to page.rows
-      )
-    }
-
     enum class MappedType {
       OffsetLimit, PageNoPageSize, Both
     }
