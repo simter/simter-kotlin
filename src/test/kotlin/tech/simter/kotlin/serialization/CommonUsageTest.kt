@@ -124,12 +124,13 @@ class CommonUsageTest {
   @Test
   @Disabled
   fun testComputedProperty() {
-    @Serializable
-    data class Bean(val name: String) {
-      val computed: String
-        get() = "--$name"
-    }
-    assertThat(stableJson.encodeToString(Bean(name = "rj")))
+    assertThat(stableJson.encodeToString(BeanWithComputedProperty(name = "rj")))
       .isEqualTo("""{"name":"rj","computed":"--rj"}""")
+  }
+  
+  @Serializable
+  data class BeanWithComputedProperty(val name: String) {
+    val computed: String
+      get() = "--$name"
   }
 }
