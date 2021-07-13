@@ -1,8 +1,12 @@
 # simter-kotlin changelog
 
+## 3.0.0-M3 - 2021-07-15
+
+- Upgrade to simter-3.0.0-M3 (kotlin-1.5.20)
+
 ## 3.0.0-M2 - 2021-04-28
 
-- Upgrade to simter-3.0.0-M2
+- Upgrade to simter-3.0.0-M2 (kotlin-1.4.32)
 - Make Page interface serializable
 - Set default classDiscriminator to '#class'
 - Change `Page.offset` to `Long` type
