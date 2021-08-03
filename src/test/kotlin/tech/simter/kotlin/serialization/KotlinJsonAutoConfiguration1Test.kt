@@ -43,8 +43,8 @@ class KotlinJsonAutoConfiguration1Test @Autowired constructor(private val json: 
       ldt = ldt,
       ldtList = listOf(ldt)
     )))
-      .isEqualTo("""{"id":0,"code":"c","name":"n","bd":100.01,"ld":"2021-01-31","ldt":"2021-01-31 08:10:30""""+
-      ""","ldtList":["2021-01-31 08:10:30"]}""")
+      .isEqualTo("""{"id":0,"code":"c","name":"n","bd":100.01,"ld":"2021-01-31","ldt":"2021-01-31T08:10:30""""+
+      ""","ldtList":["2021-01-31T08:10:30"]}""")
 
     assertThat(json.encodeToString(Bean(
       id = 0,
@@ -54,7 +54,7 @@ class KotlinJsonAutoConfiguration1Test @Autowired constructor(private val json: 
       ldt = ldt,
       ldtList = emptyList()
     )))
-      .isEqualTo("""{"id":0,"code":"c","name":"n","ld":"2021-01-31","ldt":"2021-01-31 08:10:30""""+
+      .isEqualTo("""{"id":0,"code":"c","name":"n","ld":"2021-01-31","ldt":"2021-01-31T08:10:30""""+
       ""","ldtList":[]}""")
   }
 

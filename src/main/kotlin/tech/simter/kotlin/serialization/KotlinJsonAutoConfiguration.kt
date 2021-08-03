@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import tech.simter.kotlin.data.Page
-import tech.simter.kotlin.serialization.serializer.javatime.common.CommonJavaTimeSerialModule
+import tech.simter.kotlin.serialization.serializer.javatime.iso.IsoJavaTimeSerialModule
 import tech.simter.kotlin.serialization.serializer.math.BigDecimalSerializer
 import java.math.BigDecimal
 
@@ -99,7 +99,7 @@ class KotlinJsonAutoConfiguration {
   @Bean("javaTimeSerializersModule")
   @ConditionalOnMissingBean(name = ["javaTimeSerializersModule"])
   fun javaTimeSerializersModule(): SerializersModule {
-    return CommonJavaTimeSerialModule
+    return IsoJavaTimeSerialModule
   }
 
   /** Register default [BigDecimal] [SerializersModule] */
