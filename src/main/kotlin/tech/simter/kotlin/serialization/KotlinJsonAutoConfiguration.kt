@@ -19,7 +19,7 @@ import tech.simter.kotlin.serialization.serializer.math.BigDecimalSerializer
 import java.math.BigDecimal
 
 /**
- * A [Json] auto configuration.
+ * A [Json] auto-configuration.
  *
  * Custom module can register its own [SerializersModule] through bellow sample code:
  *
