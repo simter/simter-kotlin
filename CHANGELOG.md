@@ -1,8 +1,16 @@
 # simter-kotlin changelog
 
+## 3.0.0-M3 - 2021-08-18
+
+- Upgrade to simter-3.0.0-M3 (kotlin-1.5.21)
+- Add convenient `Id` data class
+- Set `SIMTER_CLASS_DISCRIMINATOR` to `"#class"`
+- Set default `javaTimeSerializersModule` to `IsoJavaTimeSerialModule`
+- Add convinience emthod `Json.encodeToString(value: T, vararg excludeProperties: String): String`
+
 ## 3.0.0-M2 - 2021-04-28
 
-- Upgrade to simter-3.0.0-M2
+- Upgrade to simter-3.0.0-M2 (kotlin-1.4.32)
 - Make Page interface serializable
 - Set default classDiscriminator to '#class'
 - Change `Page.offset` to `Long` type
