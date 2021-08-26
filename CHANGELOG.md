@@ -1,5 +1,11 @@
 # simter-kotlin changelog
 
+## 3.0.0-M4 - 2021-08-26
+
+- Upgrade to simter-3.0.0-M4
+- Add CommonLocalDateTimeToMinuteSerializer
+    > yyyy-MM-dd HH:mm
+
 ## 3.0.0-M3 - 2021-08-18
 
 - Upgrade to simter-3.0.0-M3 (kotlin-1.5.21)
