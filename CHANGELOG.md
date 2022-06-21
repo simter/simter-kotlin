@@ -1,5 +1,9 @@
 # simter-kotlin changelog
 
+## 3.0.0 - 2022-06-21
+
+- Upgrade to simter-dependencies-3.0.0 (jdk-17)
+
 ## 3.0.0-M4 - 2021-08-26
 
 - Upgrade to simter-3.0.0-M4
