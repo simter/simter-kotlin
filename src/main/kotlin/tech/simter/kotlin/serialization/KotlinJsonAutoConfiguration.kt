@@ -68,11 +68,13 @@ class KotlinJsonAutoConfiguration {
     @Value("\${simter.kotlinx-serialization.remove-class-discriminator:false}")
     removeClassDiscriminator: Boolean,
     @Value("\${simter.kotlinx-serialization.class-discriminator:#class}")
-    classDiscriminator: String = SIMTER_CLASS_DISCRIMINATOR
+    classDiscriminator: String = SIMTER_CLASS_DISCRIMINATOR,
+    @Value("\${simter.kotlinx-serialization.encode-defaults:false}")
+    encodeDefaults: Boolean,
   ): Json {
     val json = Json {
       this.ignoreUnknownKeys = true // ignore unknown keys when deserialize
-      this.encodeDefaults = false // property not serialize if value equals to its default value
+      this.encodeDefaults = encodeDefaults // false: property not serialize if value equals to its default value
       this.prettyPrint = false // no indent and spaces between key or value
       this.isLenient = true // allowed quoted boolean literals, and unquoted string literals
       this.classDiscriminator = classDiscriminator // default value is 'type'
