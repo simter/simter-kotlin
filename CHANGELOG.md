@@ -1,5 +1,13 @@
 # simter-kotlin changelog
 
+## 3.1.0 - 2022-09-14
+
+- Upgrade to simter-dependencies-3.2.0
+- Add Enum extension for find it by parameter value
+- Add json extension for convert JsonElement to native value
+- Add property config 'simter.kotlinx-serialization.encode-defaults'
+    > default value set to false.
+
 ## 3.0.0 - 2022-06-21
 
 - Upgrade to simter-dependencies-3.0.0 (jdk-17)
