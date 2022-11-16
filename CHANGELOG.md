@@ -1,5 +1,13 @@
 # simter-kotlin changelog
 
+## 3.2.0 - 2022-11-16
+
+- Upgrade to simter-dependencies-3.4.0
+- Add json extension for convert native value to JsonElement
+    - `fromNativeMap(...)` 
+    - `fromNativeCollection(...)` 
+    - `fromNativeValue(...)` 
+
 ## 3.1.0 - 2022-09-14
 
 - Upgrade to simter-dependencies-3.2.0
