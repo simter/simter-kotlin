@@ -233,3 +233,78 @@ fun JsonElement.toNativeValue(
     }
   }
 }
+
+/**
+ * Convert the native value [Map] instance to a [JsonElement] instance.
+ */
+fun fromNativeMap(
+  source: Map<String, Any?>,
+  valueMapper: Map<String, (value: Any?) -> JsonElement> = emptyMap(),
+  key: String = "",
+): JsonObject {
+  return buildJsonObject {
+    source.forEach { (k, v) ->
+      val combineKey = if (key.isEmpty()) k else "${key}.${k}"
+      put(
+        key = k,
+        element = fromNativeValue(
+          key = combineKey,
+          value = v,
+          valueMapper = valueMapper,
+        )
+      );
+    }
+  }
+}
+
+/**
+ * Convert the native value [Map] instance to a [JsonElement] instance.
+ */
+fun fromNativeCollection(
+  source: Collection<Any?>,
+  valueMapper: Map<String, (value: Any?) -> JsonElement> = emptyMap(),
+  key: String = "",
+): JsonArray {
+  return buildJsonArray {
+    source.forEach { v ->
+      add(
+        fromNativeValue(
+          key = key,
+          value = v,
+          valueMapper = valueMapper,
+        )
+      )
+    }
+  }
+}
+
+/**
+ * Convert the native value to a [JsonElement] instance.
+ */
+fun fromNativeValue(
+  value: Any?,
+  valueMapper: Map<String, (value: Any?) -> JsonElement> = emptyMap(),
+  key: String = "",
+): JsonElement {
+  @Suppress("UNCHECKED_CAST")
+  return if (valueMapper.containsKey(key)) valueMapper[key]!!.invoke(value)
+  else when (value) {
+    null -> JsonNull
+    is Boolean -> JsonPrimitive(value)
+    is String -> JsonPrimitive(value)
+    is Number -> JsonPrimitive(value)
+    is Map<*, *> -> fromNativeMap(
+      key = key,
+      source = value as Map<String, Any?>,
+      valueMapper = valueMapper,
+    )
+
+    is Collection<*> -> fromNativeCollection(
+      key = key,
+      source = value,
+      valueMapper = valueMapper,
+    )
+
+    else -> JsonPrimitive(value.toString())
+  }
+}

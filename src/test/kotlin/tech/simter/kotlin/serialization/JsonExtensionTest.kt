@@ -132,4 +132,63 @@ class JsonExtensionTest {
       )
     )
   }
+
+  @Test
+  fun `native map to jsonObject - default simple rule`() {
+    val m = mapOf("s" to "s", "b" to true, "n" to 1, "bn" to BigDecimal("1.23"), "null" to null)
+    assertThat(fromNativeMap(source = m)).isEqualTo(buildJsonObject {
+      put("s", "s")
+      put("b", true)
+      put("n", 1)
+      put("bn", 1.23)
+      put("null", JsonNull)
+    })
+  }
+
+  @Test
+  fun `native map to jsonObject - with value mapper 1`() {
+    val m = mapOf("s" to "s", "b" to true)
+    assertThat(
+      fromNativeMap(
+        source = m,
+        valueMapper = mapOf("s" to { v -> JsonPrimitive("${v}.more") }),
+      )
+    ).isEqualTo(buildJsonObject {
+      put("s", "s.more")
+      put("b", true)
+    })
+  }
+
+  @Test
+  fun `native map to jsonObject - with value mapper 2`() {
+    val m = mapOf("n" to null, "items" to listOf("a", "b"))
+    val a = JsonArray(listOf(JsonPrimitive("b"), JsonPrimitive("c")))
+    assertThat(
+      fromNativeMap(
+        source = m,
+        valueMapper = mapOf("items" to { a }),
+      )
+    ).isEqualTo(buildJsonObject {
+      put("n", JsonNull)
+      put("items", a)
+    })
+  }
+
+  @Test
+  fun `native map to jsonObject - with value mapper 3`() {
+    val m = mapOf("n" to null, "items" to listOf(mapOf("i" to 1, "s" to "s")))
+    val a = JsonArray(listOf(buildJsonObject {
+      put("i", 1)
+      put("s", "s.more")
+    }))
+    assertThat(
+      fromNativeMap(
+        source = m,
+        valueMapper = mapOf("items.s" to { JsonPrimitive("${it}.more") }),
+      )
+    ).isEqualTo(buildJsonObject {
+      put("n", JsonNull)
+      put("items", a)
+    })
+  }
 }
